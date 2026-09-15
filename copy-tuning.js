@@ -11,16 +11,8 @@
     if (status.textContent === 'モヤが集まりました') status.textContent = '厄が集まりました';
   }).observe(status, { childList: true, characterData: true, subtree: true });
   const shareText = '厄祓いしてスッキリ！\n厄祓いメーカー\n' + location.href;
-  document.querySelector('#shareButton').onclick = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: '厄祓いメーカー', text: shareText });
-        return;
-      } catch (error) {
-        if (error.name === 'AbortError') return;
-      }
-    }
-    window.open('https://x.com/intent/post?text=' + encodeURIComponent(shareText), '_blank', 'noopener');
+  document.querySelector('#shareButton').onclick = () => {
+    location.href = 'https://x.com/intent/post?text=' + encodeURIComponent(shareText);
   };
   document.querySelector('#saveButton').onclick = async () => {
     const preview = document.querySelector('#previewCanvas');
