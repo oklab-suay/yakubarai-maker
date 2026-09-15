@@ -23,6 +23,13 @@
 
   function drawSeal() {
     const ctx = preview.getContext('2d');
+    const palettes = {
+      open: { glow: '#e5ae45', light: '#fff4b8' },
+      rest: { glow: '#9aa9f3', light: '#eef0ff' },
+      grow: { glow: '#65ad70', light: '#e7ffe1' },
+      flow: { glow: '#4cbfd6', light: '#e0fbff' }
+    };
+    const palette = palettes[document.body.dataset.afterglow] || palettes.open;
     const cx = preview.width / 2, cy = preview.height * .58;
     const source = points.length > 8 ? points : Array.from({ length: 32 }, (_, i) => {
       const a = i / 31 * Math.PI * 3.7, r = 80 + i * 4;
@@ -44,12 +51,12 @@
         if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       });
       ctx.globalAlpha = .2 + (copy % 2) * .12;
-      ctx.lineWidth = 13; ctx.strokeStyle = '#8e5df0'; ctx.stroke();
+      ctx.lineWidth = 13; ctx.strokeStyle = palette.glow; ctx.stroke();
       ctx.globalAlpha = .85;
-      ctx.lineWidth = 3.2; ctx.strokeStyle = '#fff1ae'; ctx.stroke();
+      ctx.lineWidth = 3.2; ctx.strokeStyle = palette.light; ctx.stroke();
       ctx.restore();
     }
-    ctx.globalAlpha = .82; ctx.fillStyle = '#fff6ca';
+    ctx.globalAlpha = .82; ctx.fillStyle = palette.light;
     for (let i = 0; i < 12; i += 1) {
       const a = i * Math.PI / 6, r = 690;
       ctx.beginPath(); ctx.arc(Math.cos(a) * r, Math.sin(a) * r, 5, 0, Math.PI * 2); ctx.fill();
