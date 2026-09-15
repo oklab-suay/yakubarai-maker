@@ -18,19 +18,10 @@
     const preview = document.querySelector('#previewCanvas');
     const blob = await new Promise(resolve => preview.toBlob(resolve, 'image/png'));
     if (!blob) return;
-    const file = new File([blob], 'yakuyoke-wallpaper.png', { type: 'image/png' });
-    if (navigator.canShare?.({ files: [file] })) {
-      try {
-        await navigator.share({ files: [file], title: '厄祓いメーカー', text: '厄祓い画像' });
-        return;
-      } catch (error) {
-        if (error.name === 'AbortError') return;
-      }
-    }
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = file.name;
+    link.download = 'yakuyoke-wallpaper.png';
     document.body.appendChild(link);
     link.click();
     link.remove();
