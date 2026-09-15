@@ -10,5 +10,38 @@
     if (status.textContent === 'モヤがほどけてきた') status.textContent = '厄がほどけてきた';
     if (status.textContent === 'モヤが集まりました') status.textContent = '厄が集まりました';
   }).observe(status, { childList: true, characterData: true, subtree: true });
-  document.querySelector('#shareButton').onclick = () => open('https://x.com/intent/post?text=' + encodeURIComponent('厄をひとつ祓いました #厄祓いメーカー #オカルトかーちゃん'), '_blank');
+  const shareText = '厄をひとつ祓いました #厄祓いメーカー #オカルトかーちゃん';
+  document.querySelector('#shareButton').onclick = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: '厄祓いメーカー', text: shareText, url: location.href });
+        return;
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+      }
+    }
+    window.open('https://x.com/intent/post?text=' + encodeURIComponent(shareText + ' ' + location.href), '_blank', 'noopener');
+  };
+  document.querySelector('#saveButton').onclick = async () => {
+    const preview = document.querySelector('#previewCanvas');
+    const blob = await new Promise(resolve => preview.toBlob(resolve, 'image/png'));
+    if (!blob) return;
+    const file = new File([blob], 'yakuyoke-wallpaper.png', { type: 'image/png' });
+    if (navigator.canShare?.({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: '厄祓いメーカー', text: '厄祓い画像' });
+        return;
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+      }
+    }
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = file.name;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  };
 })();

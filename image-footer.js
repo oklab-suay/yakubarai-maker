@@ -11,7 +11,7 @@
     ctx.textAlign = 'center';
     ctx.shadowColor = '#fff0b2'; ctx.shadowBlur = 18;
     ctx.fillStyle = '#fff4cf'; ctx.font = '150px serif';
-    ctx.fillText('厄払いメーカー', w / 2, h - 205);
+    ctx.fillText('厄祓いメーカー', w / 2, h - 205);
     ctx.shadowBlur = 10; ctx.fillStyle = '#fff9df'; ctx.font = '105px serif';
     ctx.fillText('厄祓い完了', w / 2, h - 75);
     ctx.shadowBlur = 0;
