@@ -11,7 +11,19 @@
     if (status.textContent === 'モヤが集まりました') status.textContent = '厄が集まりました';
   }).observe(status, { childList: true, characterData: true, subtree: true });
   const shareText = '厄祓いしてスッキリ！\n厄祓いメーカー\n' + location.href;
-  document.querySelector('#shareButton').onclick = () => {
+  document.querySelector('#shareButton').onclick = async () => {
+    const preview = document.querySelector('#previewCanvas');
+    const blob = await new Promise(resolve => preview.toBlob(resolve, 'image/png'));
+    if (!blob) return;
+    const file = new File([blob], 'yakuyoke-wallpaper.png', { type: 'image/png' });
+    if (navigator.canShare?.({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: '厄祓いメーカー', text: shareText });
+        return;
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+      }
+    }
     location.href = 'https://x.com/intent/post?text=' + encodeURIComponent(shareText);
   };
   document.querySelector('#saveButton').onclick = async () => {
